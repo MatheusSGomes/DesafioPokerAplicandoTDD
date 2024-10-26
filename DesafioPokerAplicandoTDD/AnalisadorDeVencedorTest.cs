@@ -18,8 +18,11 @@ public class AnalisadorDeVencedorTest
     [Theory]
     [InlineData("2O,4C,3P,6C,7C", "3O,5C,2E,9C,7P", "Segundo Jogador")]
     [InlineData( "3O,5C,2E,9C,7P", "2O,4C,3P,6C,7C", "Primeiro Jogador")]
+    [InlineData( "3O,5C,2E,9C,7P", "2O,4C,3P,6C,10E", "Segundo Jogador")]
     public void DeveAnalisarVencedorQuandoTiverMaiorCarta(
-        string cartasDoPrimeiroJogadorString, string cartasDoSegundoJogadorString, string vencedorEsperado)
+        string cartasDoPrimeiroJogadorString,
+        string cartasDoSegundoJogadorString,
+        string vencedorEsperado)
     {
         var analisador = new AnalisadorDeVencedor();
 
@@ -37,12 +40,12 @@ public class AnalisadorDeVencedor
     public string Analisar(List<string> cartasDoPrimeiroJogador, List<string> cartasDoSegundoJogador)
     {
         var maiorCartaDoPrimeiroJogador = cartasDoPrimeiroJogador
-            .Select(carta => int.Parse(carta.Substring(0, 1)))
+            .Select(carta => int.Parse(carta.Substring(0, carta.Length - 1)))
             .OrderBy(valorDaCarta => valorDaCarta)
             .Max();
 
         var maiorCartaDoSegundoJogador = cartasDoSegundoJogador
-            .Select(carta => int.Parse(carta.Substring(0, 1)))
+            .Select(carta => int.Parse(carta.Substring(0, carta.Length - 1)))
             .OrderBy(valorDaCarta => valorDaCarta)
             .Max();
 
