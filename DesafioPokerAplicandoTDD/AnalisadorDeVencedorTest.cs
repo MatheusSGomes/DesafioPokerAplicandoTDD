@@ -15,30 +15,16 @@ namespace DesafioPokerAplicandoTDD;
  */
 public class AnalisadorDeVencedorTest
 {
-    [Fact]
-    public void DeveAnalisarVencedorQuandoPrimeiroJogadorTiverMaiorCarta()
+    [Theory]
+    [InlineData("2O,4C,3P,6C,7C", "3O,5C,2E,9C,7P", "Segundo Jogador")]
+    [InlineData( "3O,5C,2E,9C,7P", "2O,4C,3P,6C,7C", "Primeiro Jogador")]
+    public void DeveAnalisarVencedorQuandoTiverMaiorCarta(
+        string cartasDoPrimeiroJogadorString, string cartasDoSegundoJogadorString, string vencedorEsperado)
     {
-        const string vencedorEsperado = "Segundo Jogador";
-
-        var cartasDoPrimeiroJogador = new List<string> { "2O", "4C", "3P", "6C", "7C" };
-        var cartasDoSegundoJogador = new List<string> { "3O", "5C", "2E", "9C", "7P" };
-
         var analisador = new AnalisadorDeVencedor();
 
-        var vencedor = analisador.Analisar(cartasDoPrimeiroJogador, cartasDoSegundoJogador);
-        
-        Assert.Equal(vencedorEsperado, vencedor);
-    }
-    
-    [Fact]
-    public void DeveAnalisarVencedorQuandoSegundoJogadorTiverMaiorCarta()
-    {
-        const string vencedorEsperado = "Primeiro Jogador";
-
-        var cartasDoPrimeiroJogador = new List<string> { "3O", "5C", "2E", "9C", "7P" };
-        var cartasDoSegundoJogador = new List<string> { "2O", "4C", "3P", "6C", "7C" };
-
-        var analisador = new AnalisadorDeVencedor();
+        var cartasDoPrimeiroJogador = cartasDoPrimeiroJogadorString.Split(",").ToList();
+        var cartasDoSegundoJogador = cartasDoSegundoJogadorString.Split(",").ToList();
 
         var vencedor = analisador.Analisar(cartasDoPrimeiroJogador, cartasDoSegundoJogador);
 
