@@ -19,6 +19,7 @@ public class AnalisadorDeVencedorTest
     [InlineData("2O,4C,3P,6C,7C", "3O,5C,2E,9C,7P", "Segundo Jogador")]
     [InlineData( "3O,5C,2E,9C,7P", "2O,4C,3P,6C,7C", "Primeiro Jogador")]
     [InlineData( "3O,5C,2E,9C,7P", "2O,4C,3P,6C,10E", "Segundo Jogador")]
+    [InlineData( "3O,5C,2E,9C,VP", "2O,4C,3P,6C,AE", "Segundo Jogador")]
     public void DeveAnalisarVencedorQuandoTiverMaiorCarta(
         string cartasDoPrimeiroJogadorString,
         string cartasDoSegundoJogadorString,
@@ -40,17 +41,46 @@ public class AnalisadorDeVencedor
     public string Analisar(List<string> cartasDoPrimeiroJogador, List<string> cartasDoSegundoJogador)
     {
         var maiorCartaDoPrimeiroJogador = cartasDoPrimeiroJogador
-            .Select(carta => int.Parse(carta.Substring(0, carta.Length - 1)))
+            .Select(carta => ConverterParaValorDaCarta(carta))
             .OrderBy(valorDaCarta => valorDaCarta)
             .Max();
 
         var maiorCartaDoSegundoJogador = cartasDoSegundoJogador
-            .Select(carta => int.Parse(carta.Substring(0, carta.Length - 1)))
+            .Select(carta => ConverterParaValorDaCarta(carta))
             .OrderBy(valorDaCarta => valorDaCarta)
             .Max();
 
         return (maiorCartaDoPrimeiroJogador > maiorCartaDoSegundoJogador)
             ? "Primeiro Jogador"
             : "Segundo Jogador";
+    }
+
+    public int ConverterParaValorDaCarta(string carta)
+    {
+        var valorDaCarta = carta.Substring(0, carta.Length - 1);
+
+        if (!int.TryParse(valorDaCarta, out var valor))
+        {
+            switch (valorDaCarta)
+            {
+                case "V":
+                    valor = 11;
+                    break;
+                case "D":
+                    valor = 12;
+                    break;
+                case "R":
+                    valor = 13;
+                    break;
+                case "A":
+                    valor = 14;
+                    break;
+                default:
+                    valor = 0;
+                    break;
+            }
+        }
+
+        return valor;
     }
 }
