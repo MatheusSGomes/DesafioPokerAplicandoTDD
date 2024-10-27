@@ -34,12 +34,61 @@ public class AnalisadorDeVencedorTest
 
         Assert.Equal(vencedorEsperado, vencedor);
     }
+
+    [Theory]
+    [InlineData("2O,2C,3P,6C,7C", "3O,5C,2E,9C,7P", "Primeiro Jogador")]
+    [InlineData("3O,5C,2E,9C,7P", "2O,2C,3P,6C,7C", "Segundo Jogador")]
+    [InlineData("2O,2C,3P,6C,7C", "DO,DC,2E,9C,7P", "Segundo Jogador")]
+    [InlineData("DO,DC,2E,9C,7P", "2O,2C,3P,6C,7C", "Primeiro Jogador")]
+    public void DeveAnalisarVencedorQuandoTiverUmParDeCartasDoMesmoValor(
+        string cartasDoPrimeiroJogadorString,
+        string cartasDoSegundoJogadorString,
+        string vencedorEsperado)
+    {
+        var cartasDoPrimeiroJogador = cartasDoPrimeiroJogadorString.Split(",").ToList();
+        var cartasDoSegundoJogador = cartasDoSegundoJogadorString.Split(",").ToList();
+        var analisador = new AnalisadorDeVencedor();
+
+        var vencedor = analisador.Analisar(cartasDoPrimeiroJogador, cartasDoSegundoJogador);
+
+        Assert.Equal(vencedorEsperado, vencedor);
+    }
 }
 
 public class AnalisadorDeVencedor
 {
     public string Analisar(List<string> cartasDoPrimeiroJogador, List<string> cartasDoSegundoJogador)
     {
+        var parDeCartasDoPrimeiroJogador = cartasDoPrimeiroJogador
+            .Select(carta => ConverterParaValorDaCarta(carta))
+            .GroupBy(valorDaCarta => valorDaCarta)
+            .Where(grupo => grupo.Count() > 1);
+
+        var parDeCartasDoSegundoJogador = cartasDoSegundoJogador
+            .Select(carta => ConverterParaValorDaCarta(carta))
+            .GroupBy(valorDaCarta => valorDaCarta)
+            .Where(grupo => grupo.Count() > 1);
+
+        if (parDeCartasDoPrimeiroJogador != null && parDeCartasDoPrimeiroJogador.Any() &&
+            parDeCartasDoSegundoJogador != null && parDeCartasDoSegundoJogador.Any())
+        {
+            var maiorParDeCartasPrimeiroJogador = parDeCartasDoPrimeiroJogador
+                .Select(valor => valor.Key).OrderBy(valor => valor).Max();
+
+            var maiorParDeCartasSegundoJogador = parDeCartasDoSegundoJogador
+                .Select(valor => valor.Key).OrderBy(valor => valor).Max();
+
+            return maiorParDeCartasPrimeiroJogador > maiorParDeCartasSegundoJogador
+                ? "Primeiro Jogador"
+                : "Segundo Jogador";
+        }
+
+        else if (parDeCartasDoPrimeiroJogador != null && parDeCartasDoPrimeiroJogador.Any())
+            return "Primeiro Jogador";
+
+        else if (parDeCartasDoSegundoJogador != null && parDeCartasDoSegundoJogador.Any())
+            return "Segundo Jogador";
+
         var maiorCartaDoPrimeiroJogador = cartasDoPrimeiroJogador
             .Select(carta => ConverterParaValorDaCarta(carta))
             .OrderBy(valorDaCarta => valorDaCarta)
