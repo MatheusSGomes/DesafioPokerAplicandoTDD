@@ -55,7 +55,8 @@ public class AnalisadorDeVencedor
             : "Segundo Jogador";
     }
 
-    public int ConverterParaValorDaCarta(string carta)
+    // OBS: Métodos private não são testados diretamente (são testados indiretamente pelos métodos public)
+    private int ConverterParaValorDaCarta(string carta)
     {
         var valorDaCarta = carta.Substring(0, carta.Length - 1);
 
