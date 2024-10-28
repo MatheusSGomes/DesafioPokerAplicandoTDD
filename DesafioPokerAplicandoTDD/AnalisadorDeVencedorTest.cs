@@ -15,6 +15,13 @@ namespace DesafioPokerAplicandoTDD;
  */
 public class AnalisadorDeVencedorTest
 {
+    private readonly AnalisadorDeVencedor _analisador;
+
+    public AnalisadorDeVencedorTest()
+    {
+        _analisador = new AnalisadorDeVencedor();
+    }
+
     [Theory]
     [InlineData("2O,4C,3P,6C,7C", "3O,5C,2E,9C,7P", "Segundo Jogador")]
     [InlineData( "3O,5C,2E,9C,7P", "2O,4C,3P,6C,7C", "Primeiro Jogador")]
@@ -25,12 +32,10 @@ public class AnalisadorDeVencedorTest
         string cartasDoSegundoJogadorString,
         string vencedorEsperado)
     {
-        var analisador = new AnalisadorDeVencedor();
-
         var cartasDoPrimeiroJogador = cartasDoPrimeiroJogadorString.Split(",").ToList();
         var cartasDoSegundoJogador = cartasDoSegundoJogadorString.Split(",").ToList();
 
-        var vencedor = analisador.Analisar(cartasDoPrimeiroJogador, cartasDoSegundoJogador);
+        var vencedor = _analisador.Analisar(cartasDoPrimeiroJogador, cartasDoSegundoJogador);
 
         Assert.Equal(vencedorEsperado, vencedor);
     }
@@ -47,9 +52,23 @@ public class AnalisadorDeVencedorTest
     {
         var cartasDoPrimeiroJogador = cartasDoPrimeiroJogadorString.Split(",").ToList();
         var cartasDoSegundoJogador = cartasDoSegundoJogadorString.Split(",").ToList();
-        var analisador = new AnalisadorDeVencedor();
 
-        var vencedor = analisador.Analisar(cartasDoPrimeiroJogador, cartasDoSegundoJogador);
+        var vencedor = _analisador.Analisar(cartasDoPrimeiroJogador, cartasDoSegundoJogador);
+
+        Assert.Equal(vencedorEsperado, vencedor);
+    }
+
+    [Theory]
+    [InlineData("3O,5C,RE,AC,RP", "RO,4C,3P,RC,7C", "Primeiro Jogador")]
+    [InlineData("RO,4C,3P,RC,7C", "3O,5C,RE,AC,RP", "Segundo Jogador")]
+    public void DeveAnalisarVencedorQuandoDoisJogadoresEstaoEmpatadosEmParEhVencedorOQueTemAMaiorCarta(
+        string cartasDoPrimeiroJogadorString,
+        string cartasDoSegundoJogadorString,
+        string vencedorEsperado)
+    {
+        var cartasDoPrimeiroJogador = cartasDoPrimeiroJogadorString.Split(",").ToList();
+        var cartasDoSegundoJogador = cartasDoSegundoJogadorString.Split(",").ToList();
+        var vencedor = _analisador.Analisar(cartasDoPrimeiroJogador, cartasDoSegundoJogador);
 
         Assert.Equal(vencedorEsperado, vencedor);
     }
@@ -78,9 +97,10 @@ public class AnalisadorDeVencedor
             var maiorParDeCartasSegundoJogador = parDeCartasDoSegundoJogador
                 .Select(valor => valor.Key).OrderBy(valor => valor).Max();
 
-            return maiorParDeCartasPrimeiroJogador > maiorParDeCartasSegundoJogador
-                ? "Primeiro Jogador"
-                : "Segundo Jogador";
+            if (maiorParDeCartasPrimeiroJogador > maiorParDeCartasSegundoJogador)
+                return "Primeiro Jogador";
+            else if (maiorParDeCartasSegundoJogador > maiorParDeCartasPrimeiroJogador)
+                return "Segundo Jogador";
         }
 
         else if (parDeCartasDoPrimeiroJogador != null && parDeCartasDoPrimeiroJogador.Any())
