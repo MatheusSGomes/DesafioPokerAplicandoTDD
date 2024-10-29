@@ -17,6 +17,14 @@ public class CartaTest
 
         cartaEsperada.ToExpectedObject().ShouldMatch(carta);
     }
+
+    [Fact]
+    public void DeveValidarValorDaCarta()
+    {
+        const int valorDaCartaInvalido = 1;
+
+        Assert.Throws<Exception>(() => new Carta(valor: valorDaCartaInvalido, naipe: "O"));
+    }
 }
 
 public class Carta
@@ -27,6 +35,9 @@ public class Carta
 
     public Carta(int valor, string naipe)
     {
+        if (valor < 2 || valor > 15)
+            throw new Exception("Valor da carta inválido");
+
         Valor = valor;
         Naipe = naipe;
     }
