@@ -1,3 +1,5 @@
+using ExpectedObjects;
+
 namespace DesafioPokerAplicandoTDD;
 
 public class CartaTest
@@ -5,13 +7,15 @@ public class CartaTest
     [Fact]
     public void DeveCriarUmaCarta()
     {
-        const int valorEsperado = 14;
-        const string naipeEsperado = "O";
+        var cartaEsperada = new
+        {
+            Valor = 14,
+            Naipe = "O"
+        };
 
-        var carta = new Carta(valorEsperado, naipeEsperado);
+        var carta = new Carta(cartaEsperada.Valor, cartaEsperada.Naipe);
 
-        Assert.Equal(valorEsperado, carta.Valor);
-        Assert.Equal(naipeEsperado, carta.Naipe);
+        cartaEsperada.ToExpectedObject().ShouldMatch(carta);
     }
 }
 
