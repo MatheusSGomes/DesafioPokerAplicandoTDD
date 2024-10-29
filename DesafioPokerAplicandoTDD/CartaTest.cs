@@ -33,7 +33,10 @@ public class CartaTest
     [InlineData("Z")]
     public void DeveValidarNaipeDaCarta(string valorDoNaipeInvalido)
     {
-        Assert.Throws<Exception>(() => new Carta(valor: 2, naipe: valorDoNaipeInvalido));
+        var mensagemDeErro =
+            Assert.Throws<Exception>(() => new Carta(valor: 2, naipe: valorDoNaipeInvalido)).Message;
+
+        Assert.Equal("Naipe da carta inválido", mensagemDeErro);
     }
 }
 
