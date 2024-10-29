@@ -27,6 +27,14 @@ public class CartaTest
     {
         Assert.Throws<Exception>(() => new Carta(valor: valorDaCartaInvalido, naipe: "O"));
     }
+
+    [Theory]
+    [InlineData("A")]
+    [InlineData("Z")]
+    public void DeveValidarNaipeDaCarta(string valorDoNaipeInvalido)
+    {
+        Assert.Throws<Exception>(() => new Carta(valor: 2, naipe: valorDoNaipeInvalido));
+    }
 }
 
 public class Carta
@@ -39,6 +47,9 @@ public class Carta
     {
         if (valor < 2 || valor > 14)
             throw new Exception("Valor da carta inválido");
+
+        if (naipe != "O" && naipe != "C" && naipe != "E" && naipe != "P")
+            throw new Exception("Naipe da carta inválido");
 
         Valor = valor;
         Naipe = naipe;
