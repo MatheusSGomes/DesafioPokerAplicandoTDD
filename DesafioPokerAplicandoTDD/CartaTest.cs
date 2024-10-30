@@ -13,7 +13,7 @@ public class CartaTest
             Naipe = "O"
         };
 
-        var carta = new Carta(cartaEsperada.Valor, cartaEsperada.Naipe);
+        var carta = new Carta(cartaEsperada.Valor + cartaEsperada.Naipe);
 
         cartaEsperada.ToExpectedObject().ShouldMatch(carta);
     }
@@ -25,7 +25,7 @@ public class CartaTest
     [InlineData("A", 14)]
     public void DeveCriarUmaCartaComPeso(string valorDaCarta, int pesoEsperado)
     {
-        var carta = new Carta(valor: valorDaCarta, naipe: "E");
+        var carta = new Carta(valorDaCarta + "E");
 
         Assert.Equal(pesoEsperado, carta.Peso);
     }
@@ -37,7 +37,7 @@ public class CartaTest
     [InlineData("15")]
     public void DeveValidarValorDaCarta(string valorDaCartaInvalido)
     {
-        Assert.Throws<Exception>(() => new Carta(valor: valorDaCartaInvalido, naipe: "O"));
+        Assert.Throws<Exception>(() => new Carta(valorDaCartaInvalido + "O"));
     }
 
     [Theory]
@@ -46,7 +46,7 @@ public class CartaTest
     public void DeveValidarNaipeDaCarta(string valorDoNaipeInvalido)
     {
         var mensagemDeErro =
-            Assert.Throws<Exception>(() => new Carta(valor: "2", naipe: valorDoNaipeInvalido)).Message;
+            Assert.Throws<Exception>(() => new Carta("2" + valorDoNaipeInvalido)).Message;
 
         Assert.Equal("Naipe da carta inválido", mensagemDeErro);
     }
@@ -59,14 +59,16 @@ public class Carta
 
     public string Naipe { get; set; }
 
-    public Carta(string valor, string naipe)
+    public Carta(string carta)
     {
-        if (naipe != "O" && naipe != "C" && naipe != "E" && naipe != "P")
+        Naipe = carta.Substring(carta.Length - 1); // Pega última posição da carta
+        Valor = carta.Replace(Naipe, String.Empty); // Remove o Naipe
+
+
+        if (Naipe != "O" && Naipe != "C" && Naipe != "E" && Naipe != "P")
             throw new Exception("Naipe da carta inválido");
 
-        Valor = valor;
-        Naipe = naipe;
-        ConverterParaPeso(valor);
+        ConverterParaPeso(Valor);
 
         if (Peso < 2 || Peso > 14)
             throw new Exception("Valor da carta inválido");
