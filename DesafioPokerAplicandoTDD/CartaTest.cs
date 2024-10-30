@@ -61,15 +61,15 @@ public class Carta
 
     public Carta(string valor, string naipe)
     {
-        // if (Peso < 2 || Peso > 14)
-        //     throw new Exception("Valor da carta inválido");
-
         if (naipe != "O" && naipe != "C" && naipe != "E" && naipe != "P")
             throw new Exception("Naipe da carta inválido");
 
         Valor = valor;
         Naipe = naipe;
         ConverterParaPeso(valor);
+
+        if (Peso < 2 || Peso > 14)
+            throw new Exception("Valor da carta inválido");
     }
 
     private void ConverterParaPeso(string valorDaCarta)
