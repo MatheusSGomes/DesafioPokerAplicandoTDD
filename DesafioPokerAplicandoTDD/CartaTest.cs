@@ -9,7 +9,7 @@ public class CartaTest
     {
         var cartaEsperada = new
         {
-            Valor = 14,
+            Valor = "A",
             Naipe = "O"
         };
 
@@ -18,12 +18,23 @@ public class CartaTest
         cartaEsperada.ToExpectedObject().ShouldMatch(carta);
     }
 
+    [Fact]
+    public void DeveCriarUmaCartaComPeso()
+    {
+        const string valorDaCarta = "A";
+        const int pesoEsperado = 14;
+
+        var carta = new Carta(valor: valorDaCarta, naipe: "E");
+
+        Assert.Equal(pesoEsperado, carta.Peso);
+    }
+
     [Theory]
-    [InlineData(-1)]
-    [InlineData(0)]
-    [InlineData(1)]
-    [InlineData(15)]
-    public void DeveValidarValorDaCarta(int valorDaCartaInvalido)
+    [InlineData("-1")]
+    [InlineData("0")]
+    [InlineData("1")]
+    [InlineData("15")]
+    public void DeveValidarValorDaCarta(string valorDaCartaInvalido)
     {
         Assert.Throws<Exception>(() => new Carta(valor: valorDaCartaInvalido, naipe: "O"));
     }
@@ -34,7 +45,7 @@ public class CartaTest
     public void DeveValidarNaipeDaCarta(string valorDoNaipeInvalido)
     {
         var mensagemDeErro =
-            Assert.Throws<Exception>(() => new Carta(valor: 2, naipe: valorDoNaipeInvalido)).Message;
+            Assert.Throws<Exception>(() => new Carta(valor: "2", naipe: valorDoNaipeInvalido)).Message;
 
         Assert.Equal("Naipe da carta inválido", mensagemDeErro);
     }
@@ -42,19 +53,48 @@ public class CartaTest
 
 public class Carta
 {
-    public int Valor { get; set; }
+    public string Valor { get; set; }
+    public int Peso { get; set; }
 
     public string Naipe { get; set; }
 
-    public Carta(int valor, string naipe)
+    public Carta(string valor, string naipe)
     {
-        if (valor < 2 || valor > 14)
-            throw new Exception("Valor da carta inválido");
+        // if (Peso < 2 || Peso > 14)
+        //     throw new Exception("Valor da carta inválido");
 
         if (naipe != "O" && naipe != "C" && naipe != "E" && naipe != "P")
             throw new Exception("Naipe da carta inválido");
 
         Valor = valor;
         Naipe = naipe;
+        ConverterParaPeso(valor);
+    }
+
+    private void ConverterParaPeso(string valorDaCarta)
+    {
+        if (!int.TryParse(valorDaCarta, out var valorOutput))
+        {
+            switch (valorDaCarta)
+            {
+                case "V":
+                    valorOutput = 11;
+                    break;
+                case "D":
+                    valorOutput = 12;
+                    break;
+                case "R":
+                    valorOutput = 13;
+                    break;
+                case "A":
+                    valorOutput = 14;
+                    break;
+                default:
+                    valorOutput = 0;
+                    break;
+            }
+        }
+
+        Peso = valorOutput;
     }
 }
