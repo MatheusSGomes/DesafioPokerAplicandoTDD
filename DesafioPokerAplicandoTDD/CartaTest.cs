@@ -18,12 +18,13 @@ public class CartaTest
         cartaEsperada.ToExpectedObject().ShouldMatch(carta);
     }
 
-    [Fact]
-    public void DeveCriarUmaCartaComPeso()
+    [Theory]
+    [InlineData("V", 11)]
+    [InlineData("D", 12)]
+    [InlineData("R", 13)]
+    [InlineData("A", 14)]
+    public void DeveCriarUmaCartaComPeso(string valorDaCarta, int pesoEsperado)
     {
-        const string valorDaCarta = "A";
-        const int pesoEsperado = 14;
-
         var carta = new Carta(valor: valorDaCarta, naipe: "E");
 
         Assert.Equal(pesoEsperado, carta.Peso);
