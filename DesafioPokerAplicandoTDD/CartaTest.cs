@@ -4,13 +4,17 @@ namespace DesafioPokerAplicandoTDD;
 
 public class CartaTest
 {
-    [Fact]
-    public void DeveCriarUmaCarta()
+    [Theory]
+    [InlineData("A", "O", 14)]
+    [InlineData("10", "E", 10)]
+    [InlineData("2", "P", 2)]
+    public void DeveCriarUmaCarta(string valorDaCarta, string naipeDaCarta, int pesoDaCarta)
     {
         var cartaEsperada = new
         {
-            Valor = "A",
-            Naipe = "O"
+            Valor = valorDaCarta,
+            Naipe = naipeDaCarta,
+            Peso = pesoDaCarta
         };
 
         var carta = new Carta(cartaEsperada.Valor + cartaEsperada.Naipe);
