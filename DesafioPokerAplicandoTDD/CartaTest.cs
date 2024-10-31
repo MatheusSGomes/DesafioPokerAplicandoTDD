@@ -54,10 +54,10 @@ public class CartaTest
 
 public class Carta
 {
-    public string Valor { get; set; }
-    public int Peso { get; set; }
+    public string Valor { get; internal set; }
+    public int Peso { get; internal set; }
 
-    public string Naipe { get; set; }
+    public string Naipe { get; internal set; }
 
     public Carta(string carta)
     {
