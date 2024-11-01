@@ -27,6 +27,20 @@ public class AnalisadorDeVencedorComParDeCartasTest
 
         Assert.Equal(vencedorEsperado, vencedor);
     }
+
+    [Fact]
+    public void NaoDeveAnalisarVencedorQuandoJogadoresNaoTemParDeCartas()
+    {
+        var cartasDoPrimeiroJogadorString = "2O,4C,3P,6C,7C";
+        var cartasDoSegundoJogadorString = "3O,5C,2E,9C,7P";
+
+        var cartasDoPrimeiroJogador = cartasDoPrimeiroJogadorString.Split(",").ToList();
+        var cartasDoSegundoJogador = cartasDoSegundoJogadorString.Split(",").ToList();
+
+        var vencedor = _analisador.Analisar(cartasDoPrimeiroJogador, cartasDoSegundoJogador);
+
+        Assert.Null(vencedor);
+    }
 }
 
 public class AnalisadorDeVencedorComParDeCartas
@@ -64,6 +78,6 @@ public class AnalisadorDeVencedorComParDeCartas
         else if (parDeCartasDoSegundoJogador != null && parDeCartasDoSegundoJogador.Any())
             return "Segundo Jogador";
 
-        throw new NotImplementedException();
+        return null;
     }
 }
