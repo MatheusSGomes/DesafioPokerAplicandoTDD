@@ -1,5 +1,10 @@
 namespace DesafioPokerAplicandoTDD;
 
+public interface IAnalisadorDeVencedorComParDeCartas
+{
+    string Analisar(List<string> cartasDoPrimeiroJogador, List<string> cartasDoSegundoJogador);
+}
+
 public class AnalisadorDeVencedorComParDeCartas
 {
     public string Analisar(List<string> cartasDoPrimeiroJogador, List<string> cartasDoSegundoJogador)
