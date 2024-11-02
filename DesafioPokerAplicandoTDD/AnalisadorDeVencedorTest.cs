@@ -32,5 +32,28 @@ public class AnalisadorDeVencedorTest
 
     [Fact]
     public void DeveAnalisarVencedorQueTemMaiorCarta()
-    {}
+    {
+        /*
+         * O objetivo do teste na controller não é saber se o retorno está correto
+         * e sim se o método Analisar foi chamado.
+         * Não só se foi chamado, mas se foi chamado com os parâmetros corretos.
+         */
+        var cartasDoPrimeiroJogadorString = "2O,4C,3P,6C,7C";
+        var cartasDoSegundoJogadorString = "3O,5C,2E,9C,7P";
+
+        var cartasDoPrimeiroJogador = cartasDoPrimeiroJogadorString.Split(",").ToList();
+        var cartasDoSegundoJogador = cartasDoSegundoJogadorString.Split(",").ToList();
+
+        // Configurar comportamento do método Analisar (mock)
+        // Ou seja, ao chamar o analisar com 2 parâmetros, será retornada uma string.
+        _analisadorDeVencedorComMaiorCarta
+            .Setup(analisador => analisador.Analisar(cartasDoPrimeiroJogador, cartasDoSegundoJogador))
+            .Returns("Segundo Jogador");
+
+        _analisador.Analisar(cartasDoPrimeiroJogador, cartasDoSegundoJogador);
+
+        // Valido se o Analisar (mock) foi chamado.
+        _analisadorDeVencedorComMaiorCarta.Verify(
+            analisador => analisador.Analisar(cartasDoPrimeiroJogador, cartasDoSegundoJogador));
+    }
 }
