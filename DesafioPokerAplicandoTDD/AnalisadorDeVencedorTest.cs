@@ -25,6 +25,7 @@ public class AnalisadorDeVencedorTest
     {
         _analisadorDeVencedorComMaiorCarta = new Mock<IAnalisadorDeVencedorComMaiorCarta>();
         _analisadorDeVencedorComParDeCartas = new Mock<IAnalisadorDeVencedorComParDeCartas>();
+
         _analisador = new AnalisadorDeVencedor(
             _analisadorDeVencedorComMaiorCarta.Object,
             _analisadorDeVencedorComParDeCartas.Object);
@@ -54,6 +55,27 @@ public class AnalisadorDeVencedorTest
 
         // Valido se o Analisar (mock) foi chamado.
         _analisadorDeVencedorComMaiorCarta.Verify(
+            analisador => analisador.Analisar(cartasDoPrimeiroJogador, cartasDoSegundoJogador));
+    }
+
+    [Fact]
+    public void DeveAnalisarVencedorQueTemParDeCartas()
+    {
+        var cartasDoPrimeiroJogadorString = "2O,4C,3P,6C,7C";
+        var cartasDoSegundoJogadorString = "3O,5C,2E,9C,7P";
+
+        var cartasDoPrimeiroJogador = cartasDoPrimeiroJogadorString.Split(",").ToList();
+        var cartasDoSegundoJogador = cartasDoSegundoJogadorString.Split(",").ToList();
+
+        // Fazer mock (atribuir um comportamento)
+        _analisadorDeVencedorComParDeCartas
+            .Setup(analisador => analisador.Analisar(cartasDoPrimeiroJogador, cartasDoSegundoJogador))
+            .Returns("Segundo Jogador");
+
+        _analisador.Analisar(cartasDoPrimeiroJogador, cartasDoSegundoJogador);
+
+        // Verifico se foi chamado
+        _analisadorDeVencedorComParDeCartas.Verify(
             analisador => analisador.Analisar(cartasDoPrimeiroJogador, cartasDoSegundoJogador));
     }
 }

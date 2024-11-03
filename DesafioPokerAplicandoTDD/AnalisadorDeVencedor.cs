@@ -19,6 +19,7 @@ public class AnalisadorDeVencedor
     public string Analisar(List<string> cartasDoPrimeiroJogador, List<string> cartasDoSegundoJogador)
     {
         var vencedor = _analisadorDeVencedorComMaiorCarta.Analisar(cartasDoPrimeiroJogador, cartasDoSegundoJogador);
+        vencedor = _analisadorDeVencedorComParDeCartas.Analisar(cartasDoPrimeiroJogador, cartasDoSegundoJogador);
 
         return vencedor;
     }
