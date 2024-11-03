@@ -79,4 +79,19 @@ public class AnalisadorDeVencedorTest
         _analisadorDeVencedorComParDeCartas.Verify(
             analisador => analisador.Analisar(_cartasDoPrimeiroJogador, _cartasDoSegundoJogador));
     }
+
+    [Fact]
+    public void NaoDeveAnalisarVencedorComMaiorCartaQuandoJogadaTerCartasComPar()
+    {
+        // Fazer mock (atribuir um comportamento)
+        _analisadorDeVencedorComParDeCartas
+            .Setup(analisador => analisador.Analisar(_cartasDoPrimeiroJogador, _cartasDoSegundoJogador))
+            .Returns("Segundo Jogador");
+
+        _analisador.Analisar(_cartasDoPrimeiroJogador, _cartasDoSegundoJogador);
+
+        // Verifico se foi NUNCA foi chamado
+        _analisadorDeVencedorComMaiorCarta.Verify(
+            analisador => analisador.Analisar(_cartasDoPrimeiroJogador, _cartasDoSegundoJogador), Times.Never);
+    }
 }
