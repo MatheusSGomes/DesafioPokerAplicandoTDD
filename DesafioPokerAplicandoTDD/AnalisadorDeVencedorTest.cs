@@ -20,6 +20,10 @@ public class AnalisadorDeVencedorTest
     private readonly Mock<IAnalisadorDeVencedorComMaiorCarta> _analisadorDeVencedorComMaiorCarta;
     private readonly AnalisadorDeVencedor _analisador;
     private readonly Mock<IAnalisadorDeVencedorComParDeCartas> _analisadorDeVencedorComParDeCartas;
+    private readonly string _cartasDoPrimeiroJogadorString;
+    private readonly string _cartasDoSegundoJogadorString;
+    private readonly List<string> _cartasDoPrimeiroJogador;
+    private readonly List<string> _cartasDoSegundoJogador;
 
     public AnalisadorDeVencedorTest()
     {
@@ -29,6 +33,12 @@ public class AnalisadorDeVencedorTest
         _analisador = new AnalisadorDeVencedor(
             _analisadorDeVencedorComMaiorCarta.Object,
             _analisadorDeVencedorComParDeCartas.Object);
+        
+        _cartasDoPrimeiroJogadorString = "2O,4C,3P,6C,7C";
+        _cartasDoSegundoJogadorString = "3O,5C,2E,9C,7P";
+        
+        _cartasDoPrimeiroJogador = _cartasDoPrimeiroJogadorString.Split(",").ToList();
+        _cartasDoSegundoJogador = _cartasDoSegundoJogadorString.Split(",").ToList();
     }
 
     [Fact]
@@ -39,43 +49,34 @@ public class AnalisadorDeVencedorTest
          * e sim se o método Analisar foi chamado.
          * Não só se foi chamado, mas se foi chamado com os parâmetros corretos.
          */
-        var cartasDoPrimeiroJogadorString = "2O,4C,3P,6C,7C";
-        var cartasDoSegundoJogadorString = "3O,5C,2E,9C,7P";
 
-        var cartasDoPrimeiroJogador = cartasDoPrimeiroJogadorString.Split(",").ToList();
-        var cartasDoSegundoJogador = cartasDoSegundoJogadorString.Split(",").ToList();
+        
 
         // Configurar comportamento do método Analisar (mock)
         // Ou seja, ao chamar o analisar com 2 parâmetros, será retornada uma string.
         _analisadorDeVencedorComMaiorCarta
-            .Setup(analisador => analisador.Analisar(cartasDoPrimeiroJogador, cartasDoSegundoJogador))
+            .Setup(analisador => analisador.Analisar(_cartasDoPrimeiroJogador, _cartasDoSegundoJogador))
             .Returns("Segundo Jogador");
 
-        _analisador.Analisar(cartasDoPrimeiroJogador, cartasDoSegundoJogador);
+        _analisador.Analisar(_cartasDoPrimeiroJogador, _cartasDoSegundoJogador);
 
         // Valido se o Analisar (mock) foi chamado.
         _analisadorDeVencedorComMaiorCarta.Verify(
-            analisador => analisador.Analisar(cartasDoPrimeiroJogador, cartasDoSegundoJogador));
+            analisador => analisador.Analisar(_cartasDoPrimeiroJogador, _cartasDoSegundoJogador));
     }
 
     [Fact]
     public void DeveAnalisarVencedorQueTemParDeCartas()
     {
-        var cartasDoPrimeiroJogadorString = "2O,4C,3P,6C,7C";
-        var cartasDoSegundoJogadorString = "3O,5C,2E,9C,7P";
-
-        var cartasDoPrimeiroJogador = cartasDoPrimeiroJogadorString.Split(",").ToList();
-        var cartasDoSegundoJogador = cartasDoSegundoJogadorString.Split(",").ToList();
-
         // Fazer mock (atribuir um comportamento)
         _analisadorDeVencedorComParDeCartas
-            .Setup(analisador => analisador.Analisar(cartasDoPrimeiroJogador, cartasDoSegundoJogador))
+            .Setup(analisador => analisador.Analisar(_cartasDoPrimeiroJogador, _cartasDoSegundoJogador))
             .Returns("Segundo Jogador");
 
-        _analisador.Analisar(cartasDoPrimeiroJogador, cartasDoSegundoJogador);
+        _analisador.Analisar(_cartasDoPrimeiroJogador, _cartasDoSegundoJogador);
 
         // Verifico se foi chamado
         _analisadorDeVencedorComParDeCartas.Verify(
-            analisador => analisador.Analisar(cartasDoPrimeiroJogador, cartasDoSegundoJogador));
+            analisador => analisador.Analisar(_cartasDoPrimeiroJogador, _cartasDoSegundoJogador));
     }
 }
